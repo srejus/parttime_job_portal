@@ -1,0 +1,16 @@
+db.sqlite3
+**/migrations/**
+**/migrations
+!**/migrations/__init__.py
+**/migrations/
+
+__pycache__/
+
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.pyc
+*.bak
+*.dat
+*.dir
