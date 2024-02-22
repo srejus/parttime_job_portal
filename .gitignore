@@ -6,11 +6,3 @@ db.sqlite3
 
 __pycache__/
 
-*.png
-*.jpg
-*.jpeg
-*.pdf
-*.pyc
-*.bak
-*.dat
-*.dir
