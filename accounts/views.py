@@ -24,6 +24,9 @@ class LoginView(View):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            acc = Account.objects.get(user=request.user)
+            if acc.user_type == 'COMPANY':
+                return redirect("/hr/")
             return redirect("/")
         err = "Invalid credentails!"
         return redirect(f"/account/login/?err={err}")
@@ -75,3 +78,9 @@ class SignupView(View):
                                          desc=company_desc,company_logo=company_logo)
 
         return redirect('/accounts/login')
+
+
+class LogoutView(View):
+    def get(self,request):
+        logout(request)
+        return redirect("/")
