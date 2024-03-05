@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 
 from .models import *
 from hr.models import Company
+from jobs.models import JobApplication
 
 # Create your views here.
 
@@ -84,3 +85,42 @@ class LogoutView(View):
     def get(self,request):
         logout(request)
         return redirect("/")
+    
+
+@method_decorator(login_required, name='dispatch')
+class ProfileView(View):
+    def get(self,request):
+        acc = Account.objects.get(user=request.user)
+        jobs = JobApplication.objects.filter(applied_by=acc).order_by('-id')
+        return render(request,'profile.html',{'acc':acc,'jobs':jobs})
+    
+    def post(self,request):
+        profile_pic = request.FILES.get("profile_pic")
+        full_name = request.POST.get("full_name")
+        number = request.POST.get("phone")
+        email = request.POST.get("email")
+        resume = request.FILES.get("resume")
+
+        company_name = request.POST.get("company_name")
+        company_desc = request.POST.get("company_desc")
+        company_logo = request.FILES.get("company_logo")
+
+        acc = Account.objects.get(user=request.user)
+
+        if profile_pic:
+            acc.profile_pic = profile_pic
+        acc.full_name = full_name
+        acc.email = email
+        acc.phone = number
+        if resume:
+            acc.resume = resume
+        if acc.user_type == 'COMPANY':
+            company = Company.objects.get(user=acc)
+            company.company_name = company_name
+            if company_logo:
+                company.company_logo = company_logo
+            company.desc = company_desc
+            company.save()
+        
+        acc.save()
+        return redirect("/accounts/profile")

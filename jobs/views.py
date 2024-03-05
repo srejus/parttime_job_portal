@@ -42,3 +42,10 @@ class ApplyJobView(View):
         msg = "Job applied Successfully!"
         return redirect(f"/?msg={msg}")
 
+
+@method_decorator(login_required, name='dispatch')
+class DeleteApplicationView(View):
+    def get(self,request,id=None):
+        job = JobApplication.objects.get(id=id)
+        job.delete()
+        return redirect("/accounts/profile")
