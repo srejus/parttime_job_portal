@@ -113,7 +113,11 @@ class ApproveView(View):
     def get(self,request,id):
         job = JobApplication.objects.get(id=id)
         job.status = 'ACCEPTED'
+        acc = job.applied_by
+        acc.working_company_id = job.job.posted_by_company.id
+        acc.save()
         job.save()
+
 
         # add that user to employee table and make the status of that employee to working at companyname
         if not Employee.objects.filter(employee=job.applied_by).exists():

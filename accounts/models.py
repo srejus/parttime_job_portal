@@ -15,6 +15,7 @@ class Account(models.Model):
     gender = models.CharField(max_length=10)
     resume = models.FileField(upload_to='resume',null=True,blank=True)
     user_type = models.CharField(max_length=25,default='JOB_SEEKER',choices=USER_TYPE_CHOICES)
+    working_company_id = models.IntegerField(null=True,blank=True)
 
     def __str__(self):
         return str(self.full_name)

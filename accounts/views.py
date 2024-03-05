@@ -92,7 +92,11 @@ class ProfileView(View):
     def get(self,request):
         acc = Account.objects.get(user=request.user)
         jobs = JobApplication.objects.filter(applied_by=acc).order_by('-id')
-        return render(request,'profile.html',{'acc':acc,'jobs':jobs})
+        try:
+            rating = Company.objects.get(user=acc).avg_rating
+        except:
+            rating = 0.0
+        return render(request,'profile.html',{'acc':acc,'jobs':jobs,'rating':rating})
     
     def post(self,request):
         profile_pic = request.FILES.get("profile_pic")

@@ -10,6 +10,7 @@ class Company(models.Model):
     company_name = models.CharField(max_length=100,null=True,blank=True)
     company_logo = models.ImageField(upload_to='company_logo')
     desc = models.CharField(max_length=200,null=True,blank=True)
+    avg_rating = models.FloatField(default=0.0)
 
     def __str__(self):
         return str(self.company_name)
@@ -44,3 +45,13 @@ class Attendence(models.Model):
 
     def __str__(self):
         return str(self.employee.employee.full_name)
+    
+
+class Review(models.Model):
+    company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    user = models.ForeignKey(Account,on_delete=models.CASCADE)
+    rating = models.FloatField(default=0.0)
+    review = models.TextField(null=True,blank=True)
+
+    def __str__(self):
+        return str(self.user)+">"+str(self.company)
