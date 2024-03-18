@@ -1,2 +1,2 @@
--> View no of days present in view employee
--> calculate salary based on that attendence
+-> View no of days present in view employee - DONE
+-> calculate salary based on that attendence - DONE

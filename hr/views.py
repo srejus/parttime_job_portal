@@ -31,6 +31,8 @@ class HrJobView(View):
             status__in=['REJECTED','ACCEPTED'])
         return render(request,'hr_job_applications.html',{'applications':applications})
 
+from django.utils import timezone
+
 
 @method_decorator(login_required, name='dispatch')
 class HrEmployeeView(View):
@@ -44,7 +46,27 @@ class HrEmployeeView(View):
         if id:
             employee = Employee.objects.filter(id=id).first()
             attendence = Attendence.objects.filter(created_at=datetime.today().date(),employee=employee).last()
-            return render(request,'hr_view_employee.html',{'employee':employee,'attendence':attendence})
+            att = Attendence.objects.filter(employee=employee)
+            try:
+                current_date = timezone.now()
+
+                # Filter attendances for the current month
+                whole_attendence = Attendence.objects.filter(
+                    created_at__year=current_date.year,
+                    created_at__month=current_date.month
+                )
+                current_month_attendances = whole_attendence.filter(is_paid=False
+                )
+
+                whole_attendence = whole_attendence.count()
+                current_month_attendances = current_month_attendances.count()
+            except:
+                current_month_attendances = 0
+                whole_attendence = 0
+            pay = current_month_attendances * employee.daily_pay
+            msg = request.GET.get("msg")
+            return render(request,'hr_view_employee.html',{'employee':employee,'attendence':attendence,
+                                                           'current_month_attendances':whole_attendence,'pay':pay,'msg':msg})
         return render(request,'hr_employees.html',{'employees':employees})
     
 
@@ -121,7 +143,7 @@ class ApproveView(View):
 
         # add that user to employee table and make the status of that employee to working at companyname
         if not Employee.objects.filter(employee=job.applied_by).exists():
-            Employee.objects.create(employee=job.applied_by)
+            Employee.objects.create(employee=job.applied_by,daily_pay=job.job.daily_salary)
         return redirect("/hr/")
 
 
@@ -132,3 +154,18 @@ class RejectView(View):
         job.status = 'REJECTED'
         job.save()
         return redirect("/hr/")
+    
+
+@method_decorator(login_required,name='dispatch')
+class HrSalaryView(View):
+    def get(self,request,id=None):
+        current_date = timezone.now()
+        Attendence.objects.filter(
+                    created_at__year=current_date.year,
+                    created_at__month=current_date.month,is_paid=False
+                ).update(is_paid=True)
+    
+        msg = "Salary Paid Successfully!"
+
+        # send noti if needed
+        return redirect(f"/hr/employee/{id}?msg={msg}")

@@ -19,6 +19,7 @@ class Company(models.Model):
 class Employee(models.Model):
     employee = models.ForeignKey(Account,on_delete=models.CASCADE,related_name='employee')
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
+    daily_pay = models.FloatField(default=0.0)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -30,6 +31,7 @@ class Attendence(models.Model):
     employee = models.ForeignKey(Employee,on_delete=models.CASCADE)
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True)
+    is_paid = models.BooleanField(default=False)
 
     def get_attendance_for_today(self):
         today = date.today()
