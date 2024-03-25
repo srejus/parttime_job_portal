@@ -1,2 +1,8 @@
 -> View no of days present in view employee - DONE
 -> calculate salary based on that attendence - DONE
+
+
+Company Dashboard
+
+-> Option to View Jobs Posted - DONE
+-> Download Resume from Application not working

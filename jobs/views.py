@@ -18,7 +18,7 @@ class FetchJobView(View):
         jobs = JobListing.objects.filter(title__icontains=keyword,
                                          location__icontains=location,shift_type=shift_type).order_by('-id')
         
-        return render(request,'index.html',{'jobs':jobs,'job':True})
+        return render(request,'/',{'jobs':jobs,'job':True})
     
 
 @method_decorator(login_required, name='dispatch')

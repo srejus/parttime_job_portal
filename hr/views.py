@@ -94,6 +94,22 @@ class MarkAttendence(View):
         if not  Attendence.objects.filter(employee=employeee,company=company,created_at=datetime.today().date()):
             Attendence.objects.create(employee=employeee,company=company)
         return redirect(f"/hr/employee/{id}")
+    
+
+@method_decorator(login_required,name='dispatch')
+class HrJobsView(View):
+    def get(self,request):
+        company = Company.objects.filter(user__user=request.user).last()
+        jobs = JobListing.objects.filter(posted_by_company=company)
+        return render(request,'hr_jobs.html',{'jobs':jobs})
+
+
+@method_decorator(login_required,name='dispatch')
+class HrDeleteJobsView(View):
+    def get(self,request,id):
+        company = Company.objects.filter(user__user=request.user).last()
+        jobs = JobListing.objects.filter(posted_by_company=company,id=id).delete()
+        return redirect("/hr/my-jobs")
 
 
 
@@ -143,7 +159,7 @@ class ApproveView(View):
 
         # add that user to employee table and make the status of that employee to working at companyname
         if not Employee.objects.filter(employee=job.applied_by).exists():
-            Employee.objects.create(employee=job.applied_by,daily_pay=job.job.daily_salary)
+            Employee.objects.create(employee=job.applied_by,daily_pay=job.job.daily_salary,company=job.job.posted_by_company)
         return redirect("/hr/")
 
 

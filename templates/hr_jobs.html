@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>JobEntry | Post Job</title>
+    <title>JobEntry | Hr My Jobs</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -71,47 +71,48 @@
         </nav>
         <!-- Navbar End -->
 
-        <!-- Main -->
-        <br><br><br><br>
-        <div style="margin-top: 50px;padding: 25px;">
-            <h1 style="text-align: center;">Post a Job</h1>
-            <form action="" method="POST">
-            {% csrf_token %}
-                <input type="text" required name="title" placeholder="Job Title" class="form-control"><br>
-                <input type="text" required name="desc" placeholder="Description" class="form-control"><br>
-                <input type="number" required name="s_f" placeholder="Salary From" class="form-control"><br>
-                <input type="number" required name="s_t" placeholder="Salary To" class="form-control"><br>
-                <input type="number" required name="base" placeholder="Base Salary" class="form-control"><br>
-                <label for="pay_type">Pay Type</label>
-                <select name="pay_type" class="form-control">
-                    <option value="DAILY">DAILY</option>
-                    <option value="WEEKLY">WEEKLY</option>
-                    <option value="MONTHLY">MONTHLY</option>
-                    <option value="HOURLY">HOURLY</option>
-                </select><br>
-                <label for="shift">Shift</label>
-                <select name="shift" class="form-control">
-                    <option value="DAY">DAY</option>
-                    <option value="EVENING">EVENING</option>
-                    <option value="NIGHT">NIGHT</option>
-                </select><br>
-                <input type="text" required name="location" placeholder="Location" class="form-control"><br>
-                <button class="btn btn-primary">Post Job</button><br><br>
-            </form>
+
+
+        <!-- Jobs Start -->
+        <div class="container-xxl py-5" id="jobs">
+            <div class="container">
+                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">My Jobs</h1>
+                <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
+                    
+                    <!-- Loop from here -->
+                    {% for job in jobs %}
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane fade show p-0 active">
+                            <div class="job-item p-4 mb-4">
+                                <div class="row g-4">
+                                    <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                                        <img class="flex-shrink-0 img-fluid border rounded" src="/static/images/{{job.posted_by_company.company_logo}}" alt="" style="width: 80px; height: 80px;">
+                                        <div class="text-start ps-4">
+                                            <h5 class="mb-3">{{job.title}}</h5>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                        <div class="d-flex mb-3">
+                                           
+                                            <a class="btn btn-danger" style="margin-right: 10px;" href="/hr/my-jobs/remove/{{job.id}}">Remove</a>
+                                            <!-- <a class="btn btn-primary" href="/hr/employee/{{employee.id}}">View</a> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                  
+                        
+                    </div>
+                    <!-- Loop ends here -->
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        <br><br><br><br><br><br>
+        <!-- Jobs End -->
 
-
-        <!-- Main ends -->
-
-        {% if err %}
-        <script>
-            alert('{{err}}');
-            window.location.href='/accoumts/login/';
-        </script>
-        {% endif %}
-
-       
 
 
         <!-- Footer Start -->
@@ -178,6 +179,27 @@
             </div>
         </div>
         <!-- Footer End -->
+
+        {% if msg %}
+        <script>
+            alert('{{msg}}');
+            window.location.href='/';
+        </script>
+        {% endif %}
+
+
+        {% if job %}
+        <script>
+            var targetDiv = document.getElementById('jobs');
+            var scrollOptions = {
+                behavior: 'smooth', // Smooth scrolling animation
+                block: 'start',     // Scroll to the top of the element
+                inline: 'nearest'   // Scroll to the nearest edge of the element
+            };
+            targetDiv.scrollIntoView(scrollOptions);
+        </script>
+
+        {% endif %}
 
 
         <!-- Back to Top -->
