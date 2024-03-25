@@ -5,4 +5,5 @@
 Company Dashboard
 
 -> Option to View Jobs Posted - DONE
--> Download Resume from Application not working
+-> Download Resume from Application not working - DONE
+-> Send email notification when job applied or changed status
