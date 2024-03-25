@@ -45,4 +45,4 @@ class JobApplication(models.Model):
     applied_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.applied_by.full_name) +" - "+ str(self.job.title)
+        return str(self.applied_by) +" - "+ str(self.job)
