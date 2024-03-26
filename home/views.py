@@ -19,7 +19,7 @@ class IndexView(View):
             acc = Account.objects.get(user=request.user)
             if acc.user_type == 'COMPANY':
                 return redirect("/hr/")
-        return render(request,'/',{'jobs':jobs,'msg':msg})
+        return render(request,'index.html',{'jobs':jobs,'msg':msg})
 
 
 @method_decorator(login_required, name='dispatch')
