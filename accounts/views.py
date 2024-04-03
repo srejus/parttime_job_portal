@@ -48,6 +48,7 @@ class SignupView(View):
         email = request.POST.get("email")
         gender = request.POST.get("gender")
         resume = request.FILES.get("resume")
+        location = request.POST.get("location")
         user_type = request.POST.get("user_type")
 
         company_name = request.POST.get("company_name")
@@ -132,6 +133,7 @@ class ProfileView(View):
         email = request.POST.get("email")
         resume = request.FILES.get("resume")
         qualification = request.POST.get("qualification")
+        location = request.POST.get("location")
 
         company_name = request.POST.get("company_name")
         company_desc = request.POST.get("company_desc")
@@ -145,6 +147,7 @@ class ProfileView(View):
         acc.email = email
         acc.phone = number
         acc.qualification = qualification
+        acc.location=location
         if resume:
             acc.resume = resume
         if acc.user_type == 'COMPANY':

@@ -16,6 +16,7 @@ class Account(models.Model):
     resume = models.FileField(upload_to='resume',null=True,blank=True)
     user_type = models.CharField(max_length=25,default='JOB_SEEKER',choices=USER_TYPE_CHOICES)
     working_company_id = models.IntegerField(null=True,blank=True)
+    location = models.CharField(max_length=100,null=True,blank=True)
 
     profile_completion_percentage = models.IntegerField(default=0)
 
