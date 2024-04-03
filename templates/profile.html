@@ -90,13 +90,17 @@
                 <input type="number" required name="phone" value="{{acc.phone}}" class="form-control"><br>
                 <label for="username">Email</label>
                 <input type="email" required name="email" value="{{acc.email}}" class="form-control"><br>
+
+                <label for="username">Qualification</label>
+                <input type="text" name="qualification" value="{{acc.qualification}}" class="form-control"><br>
                 <label for="resume">Update Resume(pdf files)</label>
                 <input type="file" name="resume" placeholder="Resume" class="form-control"><br>
 
+               
+
                 {% if acc.working_company_id %}
                 <a href="/add-review/{{acc.working_company_id}}">Add Company Review</a>
-                {% else %}
-                <p>{{rating}} <i class="fa fa-star"></i></p>
+   
                 {% endif %}
                 <br><br>
                
@@ -108,9 +112,38 @@
                 <input type="text" name="company_name" value="{{acc.company_name}}" class="form-control"><br>
                 <label for="username">Company Desc</label>
                 <input type="text" name="company_desc" value="{{acc.company_desc}}" class="form-control"><br>
+                {% if rating %}
+                <p>{{rating}} <i class="fa fa-star"></i></p>
+                {% endif %}
                 {% endif %}
 
+                <label for="">Profile Completion ({{percent}} %)</label>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{percent}}"
+                    aria-valuemin="0" aria-valuemax="100" style="width:{{percent}}%">
+                      <span class="sr-only">{{percent}}% Complete</span>
+                    </div>
+                  </div><br>
+
                 <button class="btn btn-primary">Update Profile</button><br><br>
+            </form>
+
+            <style>
+                .mbt:hover{
+                    background-color: red;
+                    border: none;
+                }
+            </style>
+            <label for="skills">Skills</label><br>
+            <div style="display: flex;flex-wrap: wrap;margin-top: 10px;">
+                {% for i in skills %}
+                <button class="btn btn-primary mbt" title="Click to Remove this"
+                 onclick="window.location.href='/accounts/profile/deleteskill/{{i.id}}'">{{i.skill}}</button>&nbsp;
+                {% endfor %}
+            </div><br>
+            <form action="" method="GET">
+                <input type="text" placeholder="Enter Skill..." name="skill" class="form-control">
+                <button class="btn btn-primary mt-2"><i class="fa fa-plus"></i>&nbsp; Add Skill</button>
             </form>
             <br><br><br>
             {% if acc.user_type == 'JOB_SEEKER' %}

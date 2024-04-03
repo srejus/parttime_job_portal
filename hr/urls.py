@@ -13,5 +13,6 @@ urlpatterns = [
     path('salary/pay/<int:id>',HrSalaryView.as_view()),
     path('approve/<int:id>',ApproveView.as_view()),
     path('reject/<int:id>',RejectView.as_view()),
+    path('mark-as-employee/<int:id>',MarkAsEmployeeView.as_view()),
     path('post-job',PostJobView.as_view()),
 ]

@@ -71,6 +71,24 @@
         </nav>
         <!-- Navbar End -->
 
+        <style>
+            .custom-card {
+              border: 1px solid #ccc;
+              border-radius: 10px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              transition: box-shadow 0.3s ease-in-out;
+            }
+        
+            .custom-card:hover {
+              box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
+        
+            .card-img-top {
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
+            }
+          </style>
+
 
 
         <!-- Jobs Start -->
@@ -80,20 +98,24 @@
                 <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
                    <div class="row">
                     <div class="col">
-                        <div class="card m-5"
+                        <div class="card m-5 custom-card"
                          style="height: 150px;text-align: center;display: flex;
                          justify-content: center;" onclick="window.location.href='/hr/jobs'">
+                         <i class="fa fa-id-card" style="color: black;font-size: 40px;"></i>
                           <h2>Job Applications</h2>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="card m-5" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/employee'">
-                            <h2>Employees</h2>
+                        <div class="card m-5 custom-card" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/employee'">
+                           
+                            <i class="fa fa-users" style="color: black;font-size: 40px;"></i>
+                               <h2>Employees</h2>
                           </div>
                     </div>
 
                     <div class="col">
-                        <div class="card m-5" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/my-jobs'">
+                        <div class="card m-5 custom-card" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/my-jobs'">
+                            <i class="fa fa-building" style="color: black;font-size: 40px;"></i>
                             <h2>My Jobs</h2>
                           </div>
                     </div>

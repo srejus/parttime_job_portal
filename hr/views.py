@@ -7,6 +7,7 @@ from datetime import datetime
 
 from .models import *
 from jobs.models import *
+from project.utils import  send_mail
 
 
 # Create your views here.
@@ -28,7 +29,7 @@ class HrJobView(View):
         
         company = Company.objects.get(user__user=request.user)
         applications = JobApplication.objects.filter(job__posted_by_company=company).exclude(
-            status__in=['REJECTED','ACCEPTED'])
+            status__in=['REJECTED'])
         return render(request,'hr_job_applications.html',{'applications':applications})
 
 from django.utils import timezone
@@ -156,12 +157,22 @@ class ApproveView(View):
         acc.save()
         job.save()
 
+        int_at = request.GET.get("int_at")
 
-        # add that user to employee table and make the status of that employee to working at companyname
+        # schedule the interview for that time
+        email_msg = f"Hello {acc.full_name},\n\nYour job application for the role {job.job.title} has been approved by the company and interview scheduled at {int_at}\n\n\nThanks"
+
+        subject = f"Congratulations You Have Been Shortlisted for the role {job.job.title}"
+        send_mail(acc.email,subject,email_msg)
+        return redirect("/hr/")
+
+
+class MarkAsEmployeeView(View):
+    def get(self,request,id):
+        job = JobApplication.objects.get(id=id)
         if not Employee.objects.filter(employee=job.applied_by).exists():
             Employee.objects.create(employee=job.applied_by,daily_pay=job.job.daily_salary,company=job.job.posted_by_company)
         return redirect("/hr/")
-
 
 @method_decorator(login_required, name='dispatch')
 class RejectView(View):

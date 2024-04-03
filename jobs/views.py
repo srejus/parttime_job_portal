@@ -28,8 +28,11 @@ class ApplyJobView(View):
         if acc.user_type != 'JOB_SEEKER':
             msg = "Company Cant Apply to a Job!"
             return redirect(f"/?msg={msg}")
+    
+        if acc.profile_completion_percentage < 80:
+            msg = "You must complete your profile atleast 80% to apply for a job!"
+            return redirect(f"/?msg={msg}")
         
-
         job = JobListing.objects.filter(id=id).first()
         job_application = JobApplication.objects.filter(job=job,applied_by=acc)
         if job_application.exists():

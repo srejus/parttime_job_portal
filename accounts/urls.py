@@ -6,4 +6,5 @@ urlpatterns = [
     path('logout',LogoutView.as_view()),
     path('profile',ProfileView.as_view()),
     path('signup',SignupView.as_view()),
+    path('profile/deleteskill/<int:id>',DeleteSkillView.as_view()),
 ]

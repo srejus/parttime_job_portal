@@ -89,14 +89,41 @@ class LogoutView(View):
 
 @method_decorator(login_required, name='dispatch')
 class ProfileView(View):
+    def get_profile_completion(self,acc):
+        percent = 0
+        if acc.email:
+            percent += 20
+        if acc.phone:
+            percent += 20
+        if acc.qualification:
+            percent += 20
+        if acc.resume:
+            percent += 20
+        if acc.profile_pic:
+            percent += 20 
+
+        acc.profile_completion_percentage = percent
+        acc.save()
+        print("Percentage : ",percent)
+        return percent
+    
     def get(self,request):
         acc = Account.objects.get(user=request.user)
+        skill = request.GET.get('skill')
+        print('Skill : ',skill,request.GET.keys())
+        if skill:
+            skill_obj = PreferredSkills.objects.filter(user=acc,skill=skill)
+            if not skill_obj.exists():
+                PreferredSkills.objects.create(user=acc,skill=skill)
+        percent = self.get_profile_completion(acc)
         jobs = JobApplication.objects.filter(applied_by=acc).order_by('-id')
         try:
             rating = Company.objects.get(user=acc).avg_rating
         except:
             rating = 0.0
-        return render(request,'profile.html',{'acc':acc,'jobs':jobs,'rating':rating})
+
+        skills = PreferredSkills.objects.filter(user=acc)
+        return render(request,'profile.html',{'acc':acc,'jobs':jobs,'rating':rating,'percent':percent,'skills':skills})
     
     def post(self,request):
         profile_pic = request.FILES.get("profile_pic")
@@ -104,6 +131,7 @@ class ProfileView(View):
         number = request.POST.get("phone")
         email = request.POST.get("email")
         resume = request.FILES.get("resume")
+        qualification = request.POST.get("qualification")
 
         company_name = request.POST.get("company_name")
         company_desc = request.POST.get("company_desc")
@@ -116,6 +144,7 @@ class ProfileView(View):
         acc.full_name = full_name
         acc.email = email
         acc.phone = number
+        acc.qualification = qualification
         if resume:
             acc.resume = resume
         if acc.user_type == 'COMPANY':
@@ -127,4 +156,10 @@ class ProfileView(View):
             company.save()
         
         acc.save()
+        return redirect("/accounts/profile")
+
+
+class DeleteSkillView(View):
+    def get(self,request,id):
+        PreferredSkills.objects.get(id=id).delete()
         return redirect("/accounts/profile")

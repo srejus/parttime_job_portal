@@ -70,6 +70,87 @@
             </div>
         </nav>
         <!-- Navbar End -->
+        <style>
+            #popup-wrapper {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            }
+
+            .popup {
+            background-color: #fff;
+            width: 300px;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+
+            .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            }
+
+            form label {
+            display: block;
+            margin-bottom: 5px;
+            }
+
+            form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            }
+
+            form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            }
+
+            form button:hover {
+            background-color: #0056b3;
+            }
+        </style>
+
+        <div id="popup-wrapper">
+            <div class="popup">
+              <h2>Schedule an Interview</h2>
+              <span class="close" id="close-popup">&times;</span>
+              <form action="#" method="post">
+                <label for="name">Interview At</label>
+                <input type="datetime-local" name="int_at" required>
+                
+                <button type="submit" class="btn btn-primary">Accept</button>
+              </form>
+            </div>
+          </div>
+
+          <script>
+            document.getElementById('open-popup').addEventListener('click', function() {
+                document.getElementById('popup-wrapper').style.display = 'block';
+                });
+
+                document.getElementById('close-popup').addEventListener('click', function() {
+                document.getElementById('popup-wrapper').style.display = 'none';
+                });
+
+          </script>
 
 
 
@@ -96,8 +177,16 @@
                                     <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                                         <div class="d-flex mb-3">
                                            
-                                            <a class="btn btn-danger" style="margin-right: 10px;" href="/hr/reject/{{job.id}}">Reject</a>
-                                            <a class="btn btn-primary" href="/hr/approve/{{job.id}}">Accept</a>
+                                            <a class="btn btn-danger" style="margin-right: 10px;height: 40px;" href="/hr/reject/{{job.id}}">Reject</a>
+                                            
+                                            {% if job.status == 'ACCEPTED' %}
+                                            <a class="btn btn-primary" style="margin-right: 10px;height: 40px;" href="/hr/mark-as-employee/{{job.id}}">Mark as Employee</a>
+                                            {% else %}
+                                            <form action="/hr/approve/{{job.id}}" style="display: flex;" method="get">
+                                                <input type="datetime-local" id="date-time-input" name="int_at" required>
+                                                <button class="btn btn-primary" style="height: 40px;">Accept</button>
+                                            </form>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -105,6 +194,16 @@
                             
                         </div>
                   
+                        <script>
+                            // Get the current date and time
+                            var now = new Date();
+                        
+                            // Format the date and time string in the required format (YYYY-MM-DDTHH:MM)
+                            var formattedDate = now.toISOString().slice(0,16);
+                        
+                            // Set the min attribute of the input element
+                            document.getElementById('date-time-input').setAttribute('min', formattedDate);
+                        </script>
                         
                     </div>
                     <!-- Loop ends here -->

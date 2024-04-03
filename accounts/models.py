@@ -17,5 +17,22 @@ class Account(models.Model):
     user_type = models.CharField(max_length=25,default='JOB_SEEKER',choices=USER_TYPE_CHOICES)
     working_company_id = models.IntegerField(null=True,blank=True)
 
+    profile_completion_percentage = models.IntegerField(default=0)
+
+    PRIMARY = "PRIMARY"
+    SECONDARY = "SECONDARY"
+    GRADUATE = "GRADUATE"
+    POST_GRADUATE = "POST_GRADUATE"
+   
+    qualification = models.CharField(max_length=100,null=True,blank=True,default='')
+
     def __str__(self):
         return str(self.full_name)
+    
+
+class PreferredSkills(models.Model):
+    user = models.ForeignKey(Account,on_delete=models.CASCADE,related_name='user_skill')
+    skill = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.user)+" > "+str(self.skill)

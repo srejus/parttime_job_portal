@@ -2,6 +2,12 @@
 -> calculate salary based on that attendence - DONE
 
 
+Employee End
+
+-> Current Company Details
+-> attendence checking
+
+
 Company Dashboard
 
 -> Option to View Jobs Posted - DONE
