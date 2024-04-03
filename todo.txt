@@ -13,3 +13,19 @@ Company Dashboard
 -> Option to View Jobs Posted - DONE
 -> Download Resume from Application not working - DONE
 -> Send email notification when job applied or changed status
+
+
+
+FINAL CHANGES
+
+
+-> Profile Completion Percent added(email,phone,qualification,resume,profile_pic each of these fields have 20% total 100%)
+-> A job seeker can apply only if the profile completion percent is 80 or above
+-> Option to add or delete skill is added in profile section and if we click on the skill then it will remove from our profile
+-> in the home when we go to jobs section we can see a button 'View more based on my skills' if we click this then will filter jobs based on the skills added
+
+
+-> When accept a job application from admin we will ask a datetime from the admin and send that time as interview datetime to job seeker
+-> If the application is accepted then we wil show option to add as employee in admin job application section
+-> in admin home there is a search field where we can search with skills or location( skill is requried and location is optional)
+-> In the candidates search results there is an option 'interested'  and if the admin click on that we will send notification to the candidate

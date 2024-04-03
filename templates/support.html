@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>JobEntry | Hr Home</title>
+    <title>JobEntry | Support</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -71,67 +71,40 @@
         </nav>
         <!-- Navbar End -->
 
-        <style>
-            .custom-card {
-              border: 1px solid #ccc;
-              border-radius: 10px;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-              transition: box-shadow 0.3s ease-in-out;
-            }
-        
-            .custom-card:hover {
-              box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            }
-        
-            .card-img-top {
-              border-top-left-radius: 10px;
-              border-top-right-radius: 10px;
-            }
-          </style>
+        <!-- Main -->
+        <br><br><br><br>
+        <div style="margin-top: 50px;padding: 25px;">
+            <h1 style="text-align: center;">Support</h1>
+            <form action="" method="POST">
+            {% csrf_token %}
+                <input type="text" required name="full_name" placeholder="Your Fullname*" class="form-control"><br>
+                <input type="email" required name="email" placeholder="Your Email*" class="form-control"><br>
+               
+                <textarea name="desc" class="form-control" style="resize: none;height: 150px;"
+                 placeholder="Describe your Issue" cols="30" rows="10"></textarea><br>
 
-
-
-        <!-- Jobs Start -->
-        <div class="container-xxl py-5" id="jobs">
-            <div class="container">
-                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Job Applications</h1>
-                <form action="" style="display: flex;">
-                    <input type="text" class="form-control" required name="term" style="width: 45%;" placeholder="Search Skills(eg: Java, Python, Sales etc)....">
-                    <input type="text" class="form-control" name="location" style="width: 45%;" placeholder="Location...">
-                    <button class="btn btn-primary">Search</button>
-                </form>
-                <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-                   <div class="row">
-                    <div class="col">
-                        <div class="card m-5 custom-card"
-                         style="height: 150px;text-align: center;display: flex;
-                         justify-content: center;" onclick="window.location.href='/hr/jobs'">
-                         <i class="fa fa-id-card" style="color: black;font-size: 40px;"></i>
-                          <h3>Job Applications</h3>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card m-5 custom-card" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/employee'">
-                           
-                            <i class="fa fa-users" style="color: black;font-size: 40px;"></i>
-                               <h3>Employees</h3>
-                          </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card m-5 custom-card" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/my-jobs'">
-                            <i class="fa fa-building" style="color: black;font-size: 40px;"></i>
-                            <h3>My Jobs</h3>
-                          </div>
-                    </div>
-                    
-
-                   </div> 
-                </div>
-            </div>
+                 <label for="">Company</label>
+                 <select name="company" class="form-control">
+                    {% for c in companies %}
+                    <option value="{{c.id}}">{{c.company_name}}</option>
+                    {% endfor %}
+                 </select><br>
+                <button class="btn btn-primary">Submit</button><br><br>
+            </form>
         </div>
-        <!-- Jobs End -->
+        <br><br><br><br><br><br>
 
+
+        <!-- Main ends -->
+
+        {% if err %}
+        <script>
+            alert('{{err}}');
+            window.location.href='/accoumts/login/';
+        </script>
+        {% endif %}
+
+       
 
 
         <!-- Footer Start -->
@@ -198,27 +171,6 @@
             </div>
         </div>
         <!-- Footer End -->
-
-        {% if msg %}
-        <script>
-            alert('{{msg}}');
-            window.location.href='/';
-        </script>
-        {% endif %}
-
-
-        {% if job %}
-        <script>
-            var targetDiv = document.getElementById('jobs');
-            var scrollOptions = {
-                behavior: 'smooth', // Smooth scrolling animation
-                block: 'start',     // Scroll to the top of the element
-                inline: 'nearest'   // Scroll to the nearest edge of the element
-            };
-            targetDiv.scrollIntoView(scrollOptions);
-        </script>
-
-        {% endif %}
 
 
         <!-- Back to Top -->

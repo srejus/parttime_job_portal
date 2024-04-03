@@ -4,21 +4,33 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from .models import *
+from accounts.models import PreferredSkills
 
 # Create your views here.
 class FetchJobView(View):
     def get(self,request,id=None):
-        jobs = JobListing.objects.get(id=id)
-        return render(request,'')
+        if id:
+            jobs = JobListing.objects.get(id=id)
+        else:
+            jobs = None
+
+        if request.user.is_authenticated:
+            skills = PreferredSkills.objects.filter(user__user=request.user).values_list('skill',flat=True)
+            jobs = JobListing.objects.filter(title__icontains=skills)
+        return render(request,'jobs.html',{'jobs':jobs})
     
     def post(self,request):
-        keyword = request.POST.get("keyword")
+        keyword = request.POST.get("keyword","")
         location = request.POST.get("location")
         shift_type = request.POST.get("shift_type")
-        jobs = JobListing.objects.filter(title__icontains=keyword,
-                                         location__icontains=location,shift_type=shift_type).order_by('-id')
+        jobs = JobListing.objects.filter(title__icontains=keyword)
+        if location != '':
+            jobs = jobs.filter(location__icontains=location)
+        if shift_type != 'Shift Type':
+            jobs = jobs.filter(shift_type=shift_type)
+        jobs = jobs.order_by('-id')
         
-        return render(request,'/',{'jobs':jobs,'job':True})
+        return render(request,'jobs.html',{'jobs':jobs,'job':True})
     
 
 @method_decorator(login_required, name='dispatch')

@@ -7,6 +7,7 @@ from datetime import datetime
 
 from .models import *
 from jobs.models import *
+from accounts.models import PreferredSkills
 from project.utils import  send_mail
 
 
@@ -18,6 +19,19 @@ class HrHomeView(View):
         if acc.user_type != 'COMPANY':
             return redirect("/")
         
+        term = request.GET.get("term")
+        location = request.POST.get("location")
+
+        if term:
+            skills = PreferredSkills.objects.filter(skill__icontains=term).values_list('user__id',flat=True)
+            candidates = Account.objects.filter(user_type='JOB_SEEKER',id__in=skills)
+            if location:
+                print("Candidates")
+                candidates = candidates.filter(location__icontains=location)
+            
+            print("candidates : ",candidates)
+            return render(request,'hr_candidates.html',{'candidates':candidates})
+
         return render(request,'hr_home.html')
 
 @method_decorator(login_required, name='dispatch')
@@ -196,3 +210,19 @@ class HrSalaryView(View):
 
         # send noti if needed
         return redirect(f"/hr/employee/{id}?msg={msg}")
+    
+
+@method_decorator(login_required,name='dispatch')
+class InterestedCandidateView(View):
+    def get(self,request,id):
+        usr = Account.objects.get(id=id)
+        acc = Account.objects.get(user=request.user)
+        company = Company.objects.filter(user=acc)
+        if company.exists():
+            company = company.last()
+            subject = f"You got a Job Interest from {company.company_name}"
+            msg = f"Hello {usr.full_name},\n{company.company_name} has shown interest on your profile.\nYou can apply to the company if you are interested\n\nThanks"
+
+            send_mail(usr.email,subject,msg)
+
+        return redirect("/hr/")

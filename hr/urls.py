@@ -15,4 +15,7 @@ urlpatterns = [
     path('reject/<int:id>',RejectView.as_view()),
     path('mark-as-employee/<int:id>',MarkAsEmployeeView.as_view()),
     path('post-job',PostJobView.as_view()),
+
+    path('candidate/<int:id>',InterestedCandidateView.as_view()),
 ]
+

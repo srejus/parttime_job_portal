@@ -8,6 +8,8 @@ from django.db.models import Avg
 from jobs.models import JobListing
 from accounts.models import Account
 from hr.models import Review,Company
+from project.utils import send_mail
+from .models import Support
 
 
 # Create your views here.
@@ -41,3 +43,21 @@ class AddReviewView(View):
             company.save()
 
         return redirect("/accounts/profile")
+    
+
+class SupportView(View):
+    def get(self,request):
+        companies = Company.objects.all()
+        return render(request,'support.html',{'companies':companies})
+    
+
+    def post(self,request):
+        full_name = request.POST.get("full_name")
+        email = request.POST.get("email")
+        desc = request.POST.get("desc")
+        com_id = request.POST.get("company")
+        company = Company.objects.get(id=com_id)
+
+        Support.objects.create(full_name=full_name,email=email,desc=desc,company=company)
+
+        return redirect("/")
