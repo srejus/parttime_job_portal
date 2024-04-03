@@ -9,7 +9,7 @@ from .models import *
 from jobs.models import *
 from accounts.models import PreferredSkills
 from project.utils import  send_mail
-
+from home.models import Support
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
@@ -226,3 +226,15 @@ class InterestedCandidateView(View):
             send_mail(usr.email,subject,msg)
 
         return redirect("/hr/")
+    
+
+@method_decorator(login_required,name='dispatch')
+class HrSupportView(View):
+    def get(self,request):
+        company = Company.objects.filter(user__user=request.user)
+        if company.exists():
+            company = company.last()
+            tickets = Support.objects.filter(company=company).order_by('-id')
+        else:
+            tickets = []
+        return render(request,'hr_support.html',{'tickets':tickets})

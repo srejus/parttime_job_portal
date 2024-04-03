@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>JobEntry | Hr Home</title>
+    <title>JobEntry | Hr Support Tickets</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -71,74 +71,45 @@
         </nav>
         <!-- Navbar End -->
 
-        <style>
-            .custom-card {
-              border: 1px solid #ccc;
-              border-radius: 10px;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-              transition: box-shadow 0.3s ease-in-out;
-              width: 100%;
-            }
-        
-            .custom-card:hover {
-              box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            }
-        
-            .card-img-top {
-              border-top-left-radius: 10px;
-              border-top-right-radius: 10px;
-            }
-
-            .col{
-                width: 250px;
-            }
-          </style>
-
 
 
         <!-- Jobs Start -->
         <div class="container-xxl py-5" id="jobs">
             <div class="container">
-                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Job Applications</h1>
-                <form action="" style="display: flex;">
-                    <input type="text" class="form-control" required name="term" style="width: 45%;" placeholder="Search Skills(eg: Java, Python, Sales etc)....">
-                    <input type="text" class="form-control" name="location" style="width: 45%;" placeholder="Location...">
-                    <button class="btn btn-primary">Search</button>
-                </form>
+                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">My Tickets</h1>
                 <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-                   <div class="row" style="flex-wrap: wrap;width: 95%;">
-                    <div class="col">
-                        <div class="card m-5 custom-card"
-                         style="height: 150px;text-align: center;display: flex;
-                         justify-content: center;" onclick="window.location.href='/hr/jobs'">
-                         <i class="fa fa-id-card" style="color: black;font-size: 40px;"></i>
-                          <h3>Job Applications</h3>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card m-5 custom-card" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/employee'">
-                           
-                            <i class="fa fa-users" style="color: black;font-size: 40px;"></i>
-                               <h3>Employees</h3>
-                          </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card m-5 custom-card" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/my-jobs'">
-                            <i class="fa fa-building" style="color: black;font-size: 40px;"></i>
-                            <h3>My Jobs</h3>
-                          </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card m-5 custom-card" style="height: 150px;text-align: center;display: flex;justify-content: center;" onclick="window.location.href='/hr/support'">
-                            <i class="fa fa-info-circle" style="color: black;font-size: 40px;"></i>
-                            <h3>Support</h3>
-                          </div>
-                    </div>
                     
-
-                   </div> 
+                    <!-- Loop from here -->
+                    {% for ticket in tickets %}
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane fade show p-0 active">
+                            <div class="job-item p-4 mb-4">
+                                <div class="row g-4">
+                                    <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                                        <div class="text-start ps-4">
+                                            <h5 class="mb-3">{{ticket.full_name}}</h5>
+                                            <p>Email : {{ticket.email}}</p>
+                                            <p>Ticket Description : {{ticket.desc}}</p>
+                                            <p>Created At : {{ticket.created_at}}</p>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                        <div class="d-flex mb-3">
+                                           
+                                            <!-- <a class="btn btn-danger" style="margin-right: 10px;" href="/hr/my-jobs/remove/{{job.id}}">Remove</a> -->
+                                            <!-- <a class="btn btn-primary" href="/hr/employee/{{employee.id}}">View</a> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                  
+                        
+                    </div>
+                    <!-- Loop ends here -->
+                    {% endfor %}
                 </div>
             </div>
         </div>

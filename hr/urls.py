@@ -17,5 +17,6 @@ urlpatterns = [
     path('post-job',PostJobView.as_view()),
 
     path('candidate/<int:id>',InterestedCandidateView.as_view()),
+    path('support',HrSupportView.as_view()),
 ]
 
