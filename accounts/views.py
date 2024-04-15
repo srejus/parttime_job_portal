@@ -187,6 +187,8 @@ class DeleteSkillView(View):
         return redirect("/accounts/profile")
     
 
+from hr.models import Employee   
+
 @method_decorator(login_required,name='dispatch')
 class MyJobView(View):
     def get(self,request):
@@ -197,4 +199,8 @@ class MyJobView(View):
             created_at__month=current_date.month,
             created_at__year=current_date.year
         ).count()
-        return render(request,'my_job.html',{'acc':acc,'attendence':attendence})
+
+        company = Employee.objects.filter(employee=acc)
+        if company.exists():
+            company = company.last()
+        return render(request,'my_job.html',{'acc':acc,'attendence':attendence,'company':company})
