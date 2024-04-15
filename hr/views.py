@@ -92,7 +92,14 @@ class HrRemoveEmployeeView(View):
         if acc.user_type != 'COMPANY':
             return redirect("/")
         
-        Employee.objects.filter(id=id).delete()
+        emp = Employee.objects.filter(id=id)
+
+        usr = emp.employee
+        emp.delete()
+
+        usr.working_status = "OPEN TO WORK"
+        usr.save()
+
         return redirect("/hr")
 
 
@@ -184,8 +191,13 @@ class ApproveView(View):
 class MarkAsEmployeeView(View):
     def get(self,request,id):
         job = JobApplication.objects.get(id=id)
+        acc = job.applied_by
         if not Employee.objects.filter(employee=job.applied_by).exists():
             Employee.objects.create(employee=job.applied_by,daily_pay=job.job.daily_salary,company=job.job.posted_by_company)
+            job.delete()
+            acc.working_status = "EMPLOYED"
+            acc.save()
+            
         return redirect("/hr/")
 
 @method_decorator(login_required, name='dispatch')

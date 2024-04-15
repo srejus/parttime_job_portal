@@ -78,7 +78,7 @@
             <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <label for="username">Username</label>
-                <input type="text" required name="username" value="{{acc.user.username}}" class="form-control"><br>
+                <input readonly type="text" required name="username" value="{{acc.user.username}}" class="form-control"><br>
                 <label for="username">Full Name</label>
                 <input type="text" required name="full_name" value="{{acc.full_name}}" class="form-control"><br>
                 <label for="profile_pic">Profile Picture</label>
@@ -94,16 +94,21 @@
                 <label for="username">Location</label>
                 <input type="text" name="location" value="{{acc.location}}" class="form-control"><br>
 
+                {% if acc.user_type != 'COMPANY' %}
                 <label for="username">Qualification</label>
                 <input type="text" name="qualification" value="{{acc.qualification}}" class="form-control"><br>
                 <label for="resume">Update Resume(pdf files)</label>
                 <input type="file" name="resume" placeholder="Resume" class="form-control"><br>
 
+                {% endif %}
+
                
 
                 {% if acc.working_company_id %}
-                <a href="/add-review/{{acc.working_company_id}}">Add Company Review</a>
+                {% if acc.user_type != 'COMPANY' %}
+                <a href="/accounts/my-job">My Job</a>
    
+                {% endif %}
                 {% endif %}
                 <br><br>
                
@@ -137,6 +142,7 @@
                     border: none;
                 }
             </style>
+            {% if acc.user_type == 'JOB_SEEKER' %}
             <label for="skills">Skills</label><br>
             <div style="display: flex;flex-wrap: wrap;margin-top: 10px;">
                 {% for i in skills %}
@@ -149,7 +155,7 @@
                 <button class="btn btn-primary mt-2"><i class="fa fa-plus"></i>&nbsp; Add Skill</button>
             </form>
             <br><br><br>
-            {% if acc.user_type == 'JOB_SEEKER' %}
+            
             <h3><b>Applied Jobs</b></h3>
             {% for job in jobs %}
             <div class="tab-content">
@@ -157,7 +163,8 @@
                     <div class="job-item p-4 mb-4">
                         <div class="row g-4">
                             <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                                <img class="flex-shrink-0 img-fluid border rounded" src="/static/images/{{job.job.posted_by_company.company_logo}}" alt="" style="width: 80px; height: 80px;">
+                                <img onclick="window.location.href='/accounts/profile/{{job.job.posted_by_company.user.id}}'"
+                                class="flex-shrink-0 img-fluid border rounded" src="/static/images/{{job.job.posted_by_company.company_logo}}" alt="" style="width: 80px; height: 80px;">
                                 <div class="text-start ps-4">
                                     <h5 class="mb-3">{{job.job.title}} ({{job.status}})</h5>
                                     <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{job.job.location}}</span>

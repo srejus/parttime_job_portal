@@ -122,11 +122,12 @@
                             <div class="job-item p-4 mb-4">
                                 <div class="row g-4">
                                     <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                                        <img class="flex-shrink-0 img-fluid border rounded" src="/static/images/{{job.posted_by_company.company_logo}}" alt="" style="width: 80px; height: 80px;">
+                                        <img onclick="window.location.href='/accounts/profile/{{job.posted_by_company.user.id}}'" class="flex-shrink-0 img-fluid border rounded" src="/static/images/{{job.posted_by_company.company_logo}}" alt="" style="width: 80px; height: 80px;">
                                         <div class="text-start ps-4">
                                             <h5 class="mb-3">{{job.title}}</h5>
                                             <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{job.location}}</span>
                                             <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{job.pay_type}}</span>
+                                            <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{job.shift_type}}</span>
                                             <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>{{job.salary_from}} Rs - {{job.salary_to}} Rs</span>
                                         </div>
                                     </div>

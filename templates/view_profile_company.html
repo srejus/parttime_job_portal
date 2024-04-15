@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>JobEntry | Hr Home</title>
+    <title>JobEntry | View Profile</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -54,11 +54,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="/" class="nav-item nav-link active">Home</a>
+                    <a href="/" class="nav-item nav-link">Home</a>
                     <a href="#about" class="nav-item nav-link">About</a>
 
                     {% if request.user.is_authenticated %}
-                    <a href="/accounts/profile" class="nav-item nav-link">Profile</a>
+                    <a href="/accounts/profile" class="nav-item nav-link active">Profile</a>
                     <a href="/accounts/logout" class="nav-item nav-link">Logout</a>
                     {% else %}
                     <a href="/accounts/login/" class="nav-item nav-link">Login</a>
@@ -70,154 +70,139 @@
             </div>
         </nav>
         <!-- Navbar End -->
-        <style>
-            #popup-wrapper {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            }
 
-            .popup {
-            background-color: #fff;
-            width: 300px;
-            padding: 20px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            }
+        <!-- Main -->
+        <br><br><br><br>
+        <div style="margin-top: 50px;padding: 25px;">
+            <h1 style="text-align: center;">My Account</h1>
+            <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="username">Username</label>
+                <input readonly type="text" required name="username" value="{{acc.user.username}}" class="form-control"><br>
+                <label for="username">Full Name</label>
+                <input readonly type="text" required name="full_name" value="{{acc.full_name}}" class="form-control"><br>
+                <label for="profile_pic">Profile Picture</label>
+                <div style="display: flex;">
+                    <img src="/static/images/{{acc.profile_pic}}" style="width: 70px;height: 70px;object-fit: cover;" alt="">
+                    <input readonly type="file" name="profile_pic" placeholder="Profile Picture" class="form-control" accept="image/*"><br>
+                </div><br>
+                <label for="username">Phone</label>
+                <input readonly type="number" required name="phone" value="{{acc.phone}}" class="form-control"><br>
+                <label for="username">Email</label>
+                <input readonly type="email" required name="email" value="{{acc.email}}" class="form-control"><br>
 
-            .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            }
+                <label for="username">Location</label>
+                <input readonly type="text" name="location" value="{{acc.location}}" class="form-control"><br>
 
-            form label {
-            display: block;
-            margin-bottom: 5px;
-            }
+                {% if acc.user_type != 'COMPANY' %}
+                <label for="username">Qualification</label>
+                <input type="text" name="qualification" value="{{acc.qualification}}" class="form-control"><br>
+                <label for="resume">Update Resume(pdf files)</label>
+                <input readonly type="file" name="resume" placeholder="Resume" class="form-control"><br>
 
-            form input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            }
+                <label for="resume">Working Status</label>
+                <input readonly type="text" name="working_status" value="{{acc.working_status}}" class="form-control"><br>
+                {% endif %}
 
-            form button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            }
+               
 
-            form button:hover {
-            background-color: #0056b3;
-            }
-        </style>
+                {% if acc.working_company_id %}
+                {% if acc.user_type != 'COMPANY' %}
+                <a href="/add-review/{{acc.working_company_id}}">Add Company Review</a>
+   
+                {% endif %}
+                {% endif %}
+                <br><br>
+               
+                {% if acc.user_type == 'COMPANY' %}
+                <p>Company Details(only for companies)</p>
+                <label for="company_logo">Update Company Logo</label>
+                <input readonly type="file" name="company_logo" class="form-control"><br>
+                <label for="username">Company Name</label>
+                <input readonly type="text" name="company_name" value="{{acc.company_name}}" class="form-control"><br>
+                <label for="username">Company Desc</label>
+                <input readonly type="text" name="company_desc" value="{{acc.company_desc}}" class="form-control"><br>
+                {% if rating %}
+                <p>{{rating}} <i class="fa fa-star"></i></p>
+                {% endif %}
+                {% endif %}
 
-        <div id="popup-wrapper">
-            <div class="popup">
-              <h2>Schedule an Interview</h2>
-              <span class="close" id="close-popup">&times;</span>
-              <form action="#" method="post">
-                <label for="name">Interview At</label>
-                <input type="datetime-local" name="int_at" required>
-                
-                <button type="submit" class="btn btn-primary">Accept</button>
-              </form>
-            </div>
-          </div>
+                <label for="">Profile Completion ({{percent}} %)</label>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{percent}}"
+                    aria-valuemin="0" aria-valuemax="100" style="width:{{percent}}%">
+                      <span class="sr-only">{{percent}}% Complete</span>
+                    </div>
+                  </div><br>
 
-          <script>
-            document.getElementById('open-popup').addEventListener('click', function() {
-                document.getElementById('popup-wrapper').style.display = 'block';
-                });
+            </form>
 
-                document.getElementById('close-popup').addEventListener('click', function() {
-                document.getElementById('popup-wrapper').style.display = 'none';
-                });
-
-          </script>
-
-
-
-        <!-- Jobs Start -->
-        <div class="container-xxl py-5" id="jobs">
-            <div class="container">
-                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Job Applications</h1>
-                <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.3s">
-                    
-                    <!-- Loop from here -->
-                    {% for job in applications %}
-                    <div class="tab-content">
-                        <div id="tab-1" class="tab-pane fade show p-0 active">
-                            <div class="job-item p-4 mb-4">
-                                <div class="row g-4">
-                                    <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                                        <img class="flex-shrink-0 img-fluid border rounded" src="/static/images/{{job.applied_by.profile_pic}}" alt="" style="width: 80px; height: 80px;">
-                                        <div class="text-start ps-4">
-                                            <h5 class="mb-3">{{job.applied_by.full_name}}</h5>
-                                            <a download href="/static/images/{{job.applied_by.resume}}">Download Resume</a>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                        <div class="d-flex mb-3">
-                                           
-                                            <a class="btn btn-danger" style="margin-right: 10px;height: 40px;" href="/hr/reject/{{job.id}}">Reject</a>
-                                            
-                                            {% if job.status == 'ACCEPTED' %}
-                                            <a class="btn btn-primary" style="margin-right: 10px;height: 40px;" href="/hr/mark-as-employee/{{job.id}}">Mark as Employee</a>
-                                            {% else %}
-                                            <form action="/hr/approve/{{job.id}}" style="display: flex;" method="get">
-                                                <div style="margin-top: -30px;">
-                                                    <label for="">Choose a time for Interview</label>
-                                                    <input type="datetime-local" id="date-time-input" name="int_at" required>
-                                                </div>
-                                                <div>
-                                                    <button class="btn btn-primary" style="height: 40px;">Accept</button>
-                                                </div>
-                                            </form>
-                                            {% endif %}
-                                        </div>
-                                    </div>
+            <style>
+                .mbt:hover{
+                    background-color: red;
+                    border: none;
+                }
+            </style>
+            {% if acc.user_type == 'JOB_SEEKER' %}
+            <label for="skills">Skills</label><br>
+            <div style="display: flex;flex-wrap: wrap;margin-top: 10px;">
+                {% for i in skills %}
+                <button class="btn btn-primary mbt" title="Click to Remove this"
+                 onclick="window.location.href='/accounts/profile/deleteskill/{{i.id}}'">{{i.skill}}</button>&nbsp;
+                {% endfor %}
+            </div><br>
+            <form action="" method="GET">
+                <input type="text" placeholder="Enter Skill..." name="skill" class="form-control">
+                <button class="btn btn-primary mt-2"><i class="fa fa-plus"></i>&nbsp; Add Skill</button>
+            </form>
+            <br><br><br>
+            
+            <h3><b>Applied Jobs</b></h3>
+            {% for job in jobs %}
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade show p-0 active">
+                    <div class="job-item p-4 mb-4">
+                        <div class="row g-4">
+                            <div class="col-sm-12 col-md-8 d-flex align-items-center">
+                                <img class="flex-shrink-0 img-fluid border rounded" src="/static/images/{{job.job.posted_by_company.company_logo}}" alt="" style="width: 80px; height: 80px;">
+                                <div class="text-start ps-4">
+                                    <h5 class="mb-3">{{job.job.title}} ({{job.status}})</h5>
+                                    <span class="text-truncate me-3"><i class="fa fa-map-marker-alt text-primary me-2"></i>{{job.job.location}}</span>
+                                    <span class="text-truncate me-3"><i class="far fa-clock text-primary me-2"></i>{{job.job.pay_type}}</span>
+                                    <span class="text-truncate me-0"><i class="far fa-money-bill-alt text-primary me-2"></i>{{job.job.salary_from}} Rs - {{job.job.salary_to}} Rs</span>
                                 </div>
                             </div>
-                            
+                            <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                <div class="d-flex mb-3">
+                                    <!-- <a class="btn btn-light btn-square me-3" href=""><i class="far fa-heart text-primary"></i></a> -->
+                                    <a class="btn btn-primary" href="/jobs/application/delete/{{job.id}}">Delete Application</a>
+                                </div>
+                                <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Applied at: {{job.applied_at}}</small>
+                            </div>
                         </div>
-                  
-                        <script>
-                            // Get the current date and time
-                            var now = new Date();
-                        
-                            // Format the date and time string in the required format (YYYY-MM-DDTHH:MM)
-                            var formattedDate = now.toISOString().slice(0,16);
-                        
-                            // Set the min attribute of the input element
-                            document.getElementById('date-time-input').setAttribute('min', formattedDate);
-                        </script>
-                        
                     </div>
-                    <!-- Loop ends here -->
-                    {% endfor %}
+                    
                 </div>
+          
+                
             </div>
+            {% endfor %}
+            {% endif %}
         </div>
-        <!-- Jobs End -->
+        <br><br><br><br><br><br>
 
+
+        <!-- Main ends -->
+        {% if err %}
+        <script>
+            alert('{{err}}');
+            window.location.href='/accoumts/signup';
+        </script>
+        {% endif %}
+
+
+
+       
 
 
         <!-- Footer Start -->
@@ -284,27 +269,6 @@
             </div>
         </div>
         <!-- Footer End -->
-
-        {% if msg %}
-        <script>
-            alert('{{msg}}');
-            window.location.href='/';
-        </script>
-        {% endif %}
-
-
-        {% if job %}
-        <script>
-            var targetDiv = document.getElementById('jobs');
-            var scrollOptions = {
-                behavior: 'smooth', // Smooth scrolling animation
-                block: 'start',     // Scroll to the top of the element
-                inline: 'nearest'   // Scroll to the nearest edge of the element
-            };
-            targetDiv.scrollIntoView(scrollOptions);
-        </script>
-
-        {% endif %}
 
 
         <!-- Back to Top -->

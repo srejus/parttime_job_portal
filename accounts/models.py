@@ -17,6 +17,7 @@ class Account(models.Model):
     user_type = models.CharField(max_length=25,default='JOB_SEEKER',choices=USER_TYPE_CHOICES)
     working_company_id = models.IntegerField(null=True,blank=True)
     location = models.CharField(max_length=100,null=True,blank=True)
+    working_status = models.CharField(max_length=100,null=True,blank=True)
 
     profile_completion_percentage = models.IntegerField(default=0)
 

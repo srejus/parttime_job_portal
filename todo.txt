@@ -44,3 +44,10 @@ ADMIN/ COMPANY SIDE
 -> In the candidate search results, there is an option 'Interested', and if the admin clicks on that, we will send a notification to the candidate.
 
 -> Admin can now see all support tickets created from the Dashboard.
+
+
+
+
+
+Final CHANGES
+

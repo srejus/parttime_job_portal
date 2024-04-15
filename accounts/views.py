@@ -8,8 +8,13 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from .models import *
-from hr.models import Company
+from hr.models import Company,Attendence
 from jobs.models import JobApplication
+
+
+# getting attendence
+from django.utils import timezone
+from datetime import datetime
 
 # Create your views here.
 
@@ -108,8 +113,11 @@ class ProfileView(View):
         print("Percentage : ",percent)
         return percent
     
-    def get(self,request):
-        acc = Account.objects.get(user=request.user)
+    def get(self,request,id=None):
+        if id:
+            acc = Account.objects.get(id=id)
+        else:
+            acc = Account.objects.get(user=request.user)
         skill = request.GET.get('skill')
         print('Skill : ',skill,request.GET.keys())
         if skill:
@@ -124,7 +132,18 @@ class ProfileView(View):
             rating = 0.0
 
         skills = PreferredSkills.objects.filter(user=acc)
-        return render(request,'profile.html',{'acc':acc,'jobs':jobs,'rating':rating,'percent':percent,'skills':skills})
+        if  id:
+            return render(request,'view_profile_company.html',{'acc':acc,'jobs':jobs,'rating':rating,'percent':percent,'skills':skills})
+
+
+        # Assuming today's date
+        current_date = timezone.now()
+
+        attendence = Attendence.objects.filter(
+            created_at__month=current_date.month,
+            created_at__year=current_date.year
+        ).count()
+        return render(request,'profile.html',{'acc':acc,'jobs':jobs,'rating':rating,'percent':percent,'skills':skills,'attendence':attendence})
     
     def post(self,request):
         profile_pic = request.FILES.get("profile_pic")
@@ -166,3 +185,16 @@ class DeleteSkillView(View):
     def get(self,request,id):
         PreferredSkills.objects.get(id=id).delete()
         return redirect("/accounts/profile")
+    
+
+@method_decorator(login_required,name='dispatch')
+class MyJobView(View):
+    def get(self,request):
+        acc = Account.objects.get(user=request.user)
+        current_date = timezone.now()
+
+        attendence = Attendence.objects.filter(
+            created_at__month=current_date.month,
+            created_at__year=current_date.year
+        ).count()
+        return render(request,'my_job.html',{'acc':acc,'attendence':attendence})

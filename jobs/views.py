@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 
 from .models import *
 from accounts.models import PreferredSkills
+from hr.models import Employee
 
 # Create your views here.
 class FetchJobView(View):
@@ -41,14 +42,18 @@ class ApplyJobView(View):
             msg = "Company Cant Apply to a Job!"
             return redirect(f"/?msg={msg}")
     
-        if acc.profile_completion_percentage < 80:
-            msg = "You must complete your profile atleast 80% to apply for a job!"
+        if acc.profile_completion_percentage < 100:
+            msg = "You must complete your profile to apply for a job!"
             return redirect(f"/?msg={msg}")
         
         job = JobListing.objects.filter(id=id).first()
         job_application = JobApplication.objects.filter(job=job,applied_by=acc)
         if job_application.exists():
             msg = "You already applied to this Job!"
+            return redirect(f"/?msg={msg}")
+    
+        if Employee.objects.filter(employee__user=acc.user,company=job.posted_by_company).exists():
+            msg = "You can't apply to the company because you are already an employee of here!"
             return redirect(f"/?msg={msg}")
         
         JobApplication.objects.create(job=job,applied_by=acc)
