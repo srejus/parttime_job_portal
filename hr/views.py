@@ -92,7 +92,7 @@ class HrRemoveEmployeeView(View):
         if acc.user_type != 'COMPANY':
             return redirect("/")
         
-        emp = Employee.objects.filter(id=id)
+        emp = Employee.objects.filter(id=id).last()
 
         usr = emp.employee
         emp.delete()
