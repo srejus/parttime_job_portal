@@ -80,8 +80,11 @@ class HrEmployeeView(View):
                 whole_attendence = 0
             pay = current_month_attendances * employee.daily_pay
             msg = request.GET.get("msg")
+
+            att = Attendence.objects.filter(employee=employee).exists()
             return render(request,'hr_view_employee.html',{'employee':employee,'attendence':attendence,
-                                                           'current_month_attendances':whole_attendence,'pay':pay,'msg':msg})
+                                                           'current_month_attendances':whole_attendence,
+                                                           'pay':pay,'msg':msg,'att':att})
         return render(request,'hr_employees.html',{'employees':employees})
     
 

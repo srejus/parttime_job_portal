@@ -89,7 +89,12 @@
 
                     <tr>
                         <td style="width: 200px;">Current Month Attendence</td>
-                        <td>{{current_month_attendances}}</td>
+                        <td>{% if att %}
+                            {{current_month_attendances}}
+                            {% else %}
+
+                            0 {% endif %}
+                        </td>
                     </tr>
                     
                 </table><br><br>
